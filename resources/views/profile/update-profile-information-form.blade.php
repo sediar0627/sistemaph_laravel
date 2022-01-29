@@ -65,6 +65,12 @@
             <input id="email" type="email" wire:model.defer="state.email" class="text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200 focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:ring-2 ring-offset-current ring-gray-500">
             <x-jet-input-error for="email" class="mt-2" />
         </div>
+
+        <div class="col-span-6 sm:col-span-4">
+            <x-jet-label for="phone" value="{{ __('Telefono') }}" />
+            <input id="phone" type="text" wire:model.defer="state.phone" class="text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200 focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:ring-2 ring-offset-current ring-gray-500">
+            <x-jet-input-error for="phone" class="mt-2" />
+        </div>
     </x-slot>
 
     <x-slot name="actions">

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PiscinaController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -31,4 +32,9 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         return view('dashboard');
     })->name('lecturas');
 
+    Route::post("/lecturas", [PiscinaController::class, "lecturas"]);
+    Route::post("/lecturas/cantidad", [PiscinaController::class, "cant_lecturas"]);
+
 });
+
+Route::post("/ph/lecturas", [PiscinaController::class, "guardar_lectura"])->name("ph_lecturs");

@@ -1,11 +1,11 @@
 <?php
 
-use App\Models\User;
+use App\Models\LecturaPiscina;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateEventosTable extends Migration
+class CreateNotificacionesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,11 +14,11 @@ class CreateEventosTable extends Migration
      */
     public function up()
     {
-        Schema::create('eventos', function (Blueprint $table) {
+        Schema::create('notificaciones', function (Blueprint $table) {
             $table->id();
-            $table->string("tipo_evento");
-            $table->text("descripcion");
-            $table->foreignIdFor(User::class);
+            $table->integer("estado");
+            $table->text('mensajes');
+            $table->foreignIdFor(LecturaPiscina::class);
             $table->timestamps();
         });
     }
@@ -30,6 +30,6 @@ class CreateEventosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('eventos');
+        Schema::dropIfExists('notificacions');
     }
 }
