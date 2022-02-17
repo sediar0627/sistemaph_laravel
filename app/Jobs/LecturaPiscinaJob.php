@@ -76,23 +76,12 @@ class LecturaPiscinaJob implements ShouldQueue
                 $notificacion->save();
             } else {
                 $notificacion->estado_sms = Notificacion::ESTADOS["ENVIADA"];
-                $notificacion->fecha_sms = Carbon::now()->toDateString();
+                $notificacion->fecha_sms = Carbon::now();
                 $notificacion->save();
             }
         } catch (\Throwable $th) {
             $notificacion->estado_sms = Notificacion::ESTADOS["ERROR"];
             $notificacion->observacion_sms = "No pudimos enviarte el mensaje sms";
-            $notificacion->save();
-        }
-
-        try {
-            Http::post($this->host_whatsapp, [
-                'mensaje' => $notificacion->mensaje,
-                'telefono' => $notificacion->telefono
-            ]);
-        } catch (\Throwable $th) {
-            $notificacion->estado_whatsapp = Notificacion::ESTADOS["ERROR"];
-            $notificacion->observacion_whatsapp = "No pudimos enviarte el whatsapp";
             $notificacion->save();
         }
     }
@@ -113,6 +102,8 @@ class LecturaPiscinaJob implements ShouldQueue
 
             $cant_notificaciones = Notificacion::where('piscina_id', $this->piscina->id)
                 ->where('created_at', '>=', Carbon::now()->subMinutes(2))
+                ->where('estado_sms', Notificacion::ESTADOS["ENVIADA"])
+                ->orWhere('estado_whatsapp', Notificacion::ESTADOS["ENVIADA"])
                 ->count();
 
             if($cant_notificaciones == 0){

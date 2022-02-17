@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Validator;
 
 class PiscinaController extends Controller
 {
-    public function lectura_prueba(Request $request, $uuid_piscina, $lectura)
+    public function lectura(Request $request, $uuid_piscina, $lectura)
     {
 
         $data = [
@@ -35,10 +35,6 @@ class PiscinaController extends Controller
         LecturaPiscinaJob::dispatch($piscina, $data["lectura"]);
 
         return response()->json("OK", 200);
-    }
-
-    public function notificacion_envidada()
-    {
     }
 
     public function cant_lecturas()

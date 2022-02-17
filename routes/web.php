@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\NotificacionController;
 use App\Http\Controllers\PiscinaController;
 use Illuminate\Support\Facades\Route;
 
@@ -36,10 +37,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::post("/lecturas/cantidad", [PiscinaController::class, "cant_lecturas"]);
 });
 
-Route::get("/arduino/lectura/{uuid_piscina}/{lectura}", [PiscinaController::class, "lectura_prueba"])->name("lectura_arduino");
-Route::get("/mensaje", [PiscinaController::class, "store"])->name("lectura");
+Route::get("/arduino/lectura/{uuid_piscina}/{lectura}", [PiscinaController::class, "lectura"])->name("lectura_arduino");
 
-// Route::post("/arduino/lectura/{uuid_piscina}/{lectura}", [PiscinaController::class, "lectura_prueba"])->name("lectura_arduino");
-
-// Route::post("/arduino/lectura", [PiscinaController::class, "lectura_arduino"])->name("lectura_arduino");
-// Route::post("/notificacion/enviada", [PiscinaController::class, "guardar_lectura"])->name("ph_lectura");
+Route::post("/notificaciones/pendientes/whatsapp", [NotificacionController::class, "pendientes_whatsapp"]);
+Route::post("/notificaciones/pendientes/whatsapp/{id}", [NotificacionController::class, "pendientes_whatsapp_procesado"]);
