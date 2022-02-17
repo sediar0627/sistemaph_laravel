@@ -14,17 +14,23 @@ class Notificacion extends Model
 
     public const ESTADOS = [
         "PENDIENTE" => 1,
-        "TERMINADO" => 2
+        "ENVIADA" => 2
     ];
 
     protected $fillable = [
         'estado',
-        'mensajes',
-        'lectura_piscina_id'
+        'mensaje',
+        'lectura_piscina_id',
+        'piscina_id'
     ];
 
     public function lectura(): BelongsTo
     {
         return $this->belongsTo(LecturaPiscina::class, 'lectura_piscina_id');
+    }
+
+    public function piscina(): BelongsTo
+    {
+        return $this->belongsTo(Piscina::class, 'piscina_id');
     }
 }

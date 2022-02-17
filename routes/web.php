@@ -34,7 +34,12 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
     Route::post("/lecturas", [PiscinaController::class, "lecturas"]);
     Route::post("/lecturas/cantidad", [PiscinaController::class, "cant_lecturas"]);
-
 });
 
-Route::post("/ph/lecturas", [PiscinaController::class, "guardar_lectura"])->name("ph_lecturs");
+Route::get("/arduino/lectura/{uuid_piscina}/{lectura}", [PiscinaController::class, "lectura_prueba"])->name("lectura_arduino");
+Route::get("/mensaje", [PiscinaController::class, "store"])->name("lectura");
+
+// Route::post("/arduino/lectura/{uuid_piscina}/{lectura}", [PiscinaController::class, "lectura_prueba"])->name("lectura_arduino");
+
+// Route::post("/arduino/lectura", [PiscinaController::class, "lectura_arduino"])->name("lectura_arduino");
+// Route::post("/notificacion/enviada", [PiscinaController::class, "guardar_lectura"])->name("ph_lectura");

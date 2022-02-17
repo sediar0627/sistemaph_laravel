@@ -2,21 +2,89 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\LecturaPhMailable;
-use App\Models\Evento;
 use App\Models\LecturaPiscina;
 use App\Models\Notificacion;
 use App\Models\Piscina;
-use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
 class PiscinaController extends Controller
 {
-    public function guardar_lectura(Request $request)
+    public function lectura_prueba(Request $request, $uuid_piscina, $lectura)
+    {
+
+        $data = [
+            'codigo_piscina' => $uuid_piscina,
+            'lectura' => $lectura
+        ];
+
+        $validate_request = Validator::make($data, [
+            'codigo_piscina' => 'required|uuid|exists:App\Models\Piscina,uuid',
+            'lectura' => 'required|numeric'
+        ]);
+
+        if ($validate_request->fails()) {
+            return response()->json("bad_request", 400);
+        }
+
+        $data = $validate_request->validate();
+
+        $piscina = Piscina::where("uuid", $data["codigo_piscina"])->first();
+
+        $lectura = LecturaPiscina::create([
+            'lectura' => $data["lectura"],
+            'piscina_id' => $piscina->id
+        ]);
+
+        if ($lectura->lectura <= 6.5 || $lectura->lectura >= 7.5) {
+
+            $ultima_notificacion = Notificacion::where('piscina_id', $piscina->id)
+                ->latest('id')
+                ->first();
+
+            if ($ultima_notificacion != null) {
+
+                $minutos_diferencia = Carbon::now()->diffInMinutes($ultima_notificacion->updated_at);
+
+                if($minutos_diferencia > 5){
+                    $notificacion = Notificacion::create([
+                        'estado' => Notificacion::ESTADOS["PENDIENTE"],
+                        'mensaje' => "LA PISCINA " . strtoupper($piscina->nombre) . " TIENE UN PH DE " . $lectura->lectura,
+                        'lectura_piscina_id' => $lectura->id,
+                        'piscina_id' => $piscina->id
+                    ]);
+                } else {
+                    Notificacion::create([
+                        'estado' => Notificacion::ESTADOS["ENVIADA"],
+                        'mensaje' => "LA PISCINA " . strtoupper($piscina->nombre) . " TIENE UN PH DE " . $lectura->lectura,
+                        'lectura_piscina_id' => $lectura->id,
+                        'piscina_id' => $piscina->id
+                    ]);
+                }
+
+            } else {
+                $notificacion = Notificacion::create([
+                    'estado' => Notificacion::ESTADOS["PENDIENTE"],
+                    'mensaje' => "LA PISCINA " . strtoupper($piscina->nombre) . " TIENE UN PH DE " . $lectura->lectura,
+                    'lectura_piscina_id' => $lectura->id,
+                    'piscina_id' => $piscina->id
+                ]);
+            }
+
+            // Http::post('http://localhost:1000/reportar', [
+            //     "telefono" => $piscina->usuario->phone,
+            //     "mensajes" => $notificacion->mensajes,
+            // ]);
+
+        }
+
+        return response()->json("OK", 200);
+    }
+
+    public function lectura_arduino(Request $request)
     {
         $request_data = $request->only('codigo_piscina', 'lectura');
 
@@ -139,7 +207,7 @@ class PiscinaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        
     }
 
     /**
