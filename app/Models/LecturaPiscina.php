@@ -11,6 +11,9 @@ class LecturaPiscina extends Model
 {
     use HasFactory;
 
+    public const VALOR_MINIMO_CORRECTO = 6.6;
+    public const VALOR_MAXIMO_CORRECTO = 7.4;
+
     protected $fillable = [
         'lectura',
         'piscina_id'

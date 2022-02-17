@@ -2,13 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\LecturaPiscinaJob;
 use App\Models\LecturaPiscina;
-use App\Models\Notificacion;
 use App\Models\Piscina;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
 
 class PiscinaController extends Controller
@@ -34,101 +32,9 @@ class PiscinaController extends Controller
 
         $piscina = Piscina::where("uuid", $data["codigo_piscina"])->first();
 
-        $lectura = LecturaPiscina::create([
-            'lectura' => $data["lectura"],
-            'piscina_id' => $piscina->id
-        ]);
-
-        if ($lectura->lectura <= 6.5 || $lectura->lectura >= 7.5) {
-
-            $ultima_notificacion = Notificacion::where('piscina_id', $piscina->id)
-                ->latest('id')
-                ->first();
-
-            if ($ultima_notificacion != null) {
-
-                $minutos_diferencia = Carbon::now()->diffInMinutes($ultima_notificacion->updated_at);
-
-                if($minutos_diferencia > 5){
-                    $notificacion = Notificacion::create([
-                        'estado' => Notificacion::ESTADOS["PENDIENTE"],
-                        'mensaje' => "LA PISCINA " . strtoupper($piscina->nombre) . " TIENE UN PH DE " . $lectura->lectura,
-                        'lectura_piscina_id' => $lectura->id,
-                        'piscina_id' => $piscina->id
-                    ]);
-                } else {
-                    Notificacion::create([
-                        'estado' => Notificacion::ESTADOS["ENVIADA"],
-                        'mensaje' => "LA PISCINA " . strtoupper($piscina->nombre) . " TIENE UN PH DE " . $lectura->lectura,
-                        'lectura_piscina_id' => $lectura->id,
-                        'piscina_id' => $piscina->id
-                    ]);
-                }
-
-            } else {
-                $notificacion = Notificacion::create([
-                    'estado' => Notificacion::ESTADOS["PENDIENTE"],
-                    'mensaje' => "LA PISCINA " . strtoupper($piscina->nombre) . " TIENE UN PH DE " . $lectura->lectura,
-                    'lectura_piscina_id' => $lectura->id,
-                    'piscina_id' => $piscina->id
-                ]);
-            }
-
-            // Http::post('http://localhost:1000/reportar', [
-            //     "telefono" => $piscina->usuario->phone,
-            //     "mensajes" => $notificacion->mensajes,
-            // ]);
-
-        }
+        LecturaPiscinaJob::dispatch($piscina, $data["lectura"]);
 
         return response()->json("OK", 200);
-    }
-
-    public function lectura_arduino(Request $request)
-    {
-        $request_data = $request->only('codigo_piscina', 'lectura');
-
-        $validate_request = Validator::make($request_data, [
-            'codigo_piscina' => 'required|uuid|exists:App\Models\Piscina,uuid',
-            'lectura' => 'required|numeric'
-        ]);
-
-        if ($validate_request->fails()) {
-            return response()->json(array(
-                'status' => 'bad_request',
-                'mensajes' => 'Los campos de la peticion son invalidos.',
-                'errores' => $validate_request->errors()
-            ), 400);
-        }
-
-        $data = $validate_request->validate();
-
-        $piscina = Piscina::where("uuid", $data["codigo_piscina"])->first();
-
-        $lectura = LecturaPiscina::create([
-            'lectura' => $data["lectura"],
-            'piscina_id' => $piscina->id
-        ]);
-
-        if ($lectura->lectura <= 6.5 || $lectura->lectura >= 7.5) {
-
-            $notificacion = Notificacion::create([
-                'estado' => Notificacion::ESTADOS["PENDIENTE"],
-                'mensajes' => "LA PISCINA " . strtoupper($piscina->nombre) . ",TIENE UN PH DE " . $lectura->lectura,
-                'lectura_piscina_id' => $lectura->id
-            ]);
-
-            // Http::post('http://localhost:1000/reportar', [
-            //     "telefono" => $piscina->usuario->phone,
-            //     "mensajes" => $notificacion->mensajes,
-            // ]);
-        }
-
-        return response()->json(array(
-            'status' => 'success',
-            'mensajes' => "Creado",
-            'lectura' => $lectura
-        ), 200);
     }
 
     public function notificacion_envidada()
@@ -207,7 +113,7 @@ class PiscinaController extends Controller
      */
     public function store(Request $request)
     {
-        
+
     }
 
     /**

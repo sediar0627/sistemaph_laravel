@@ -14,12 +14,19 @@ class Notificacion extends Model
 
     public const ESTADOS = [
         "PENDIENTE" => 1,
-        "ENVIADA" => 2
+        "ENVIADA" => 2,
+        "ERROR" => 3
     ];
 
     protected $fillable = [
-        'estado',
         'mensaje',
+        'telefono',
+        'estado_sms',
+        'estado_whatsapp',
+        'fecha_sms',
+        'fecha_whatsapp',
+        'observacion_sms',
+        'observacion_whatsapp',
         'lectura_piscina_id',
         'piscina_id'
     ];
