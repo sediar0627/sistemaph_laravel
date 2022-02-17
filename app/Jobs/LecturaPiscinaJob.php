@@ -101,9 +101,7 @@ class LecturaPiscinaJob implements ShouldQueue
         if ($lectura->lectura < LecturaPiscina::VALOR_MINIMO_CORRECTO || $lectura->lectura > LecturaPiscina::VALOR_MAXIMO_CORRECTO) {
 
             $cant_notificaciones = Notificacion::where('piscina_id', $this->piscina->id)
-                ->where('created_at', '>=', Carbon::now()->subMinutes(2))
-                ->where('estado_sms', Notificacion::ESTADOS["ENVIADA"])
-                ->orWhere('estado_whatsapp', Notificacion::ESTADOS["ENVIADA"])
+                ->where('created_at', '>=', Carbon::now()->subMinutes(5))
                 ->count();
 
             if($cant_notificaciones == 0){
