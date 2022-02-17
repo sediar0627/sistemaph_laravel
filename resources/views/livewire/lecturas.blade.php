@@ -10,8 +10,8 @@
         }
 
         .canva {
-            min-width: 400px !important;
-            min-height: 200px !important;
+            min-width: 300px !important;
+            min-height: 150px !important;
             width: 80% !important;
             height: 50% !important;
             max-width: 500px !important;
@@ -46,7 +46,7 @@
                             </table>
                         </div>
                     </div>
-                    <div id="contenedor_canva_${nombre}"></div>
+                    <div id="contenedor_canva_${nombre}" class="flex items-center justify-center"></div>
                 </div>
             `);
         });

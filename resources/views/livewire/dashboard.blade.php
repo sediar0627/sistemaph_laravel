@@ -30,7 +30,7 @@
 
                             <tr>
                                 <td class="py-2 px-3 whitespace-no-wrap border-b border-gray-200 text-center">
-                                    <div class="text-sm leading-5 text-gray-900">NOTIFICACION SMS</div>
+                                    <div class="text-sm leading-5 text-gray-900">SMS</div>
                                 </td>
                                 <td class="py-2 px-3 whitespace-no-wrap border-b border-gray-200 text-center">
                                     @if ($lectura->notificacion->estado_sms == 1)
@@ -46,7 +46,7 @@
                             @if($lectura->notificacion->estado_sms == 2)
                             <tr>
                                 <td class="py-2 px-3 whitespace-no-wrap border-b border-gray-200 text-center">
-                                    <div class="text-sm leading-5 text-gray-900">FECHA ENVIO NOTIFICACION SMS</div>
+                                    <div class="text-sm leading-5 text-gray-900">ENVIO SMS</div>
                                 </td>
                                 <td class="py-2 px-3 whitespace-no-wrap border-b border-gray-200 text-center">
                                     <div class="text-sm leading-5 font-medium text-gray-900">{{ $lectura->notificacion->fecha_sms }}</div>
@@ -57,7 +57,7 @@
                             @if($lectura->notificacion->estado_sms == 3)
                             <tr>
                                 <td class="py-2 px-3 whitespace-no-wrap border-b border-gray-200 text-center">
-                                    <div class="text-sm leading-5 text-gray-900">OBSERVACION NOTIFICACION SMS</div>
+                                    <div class="text-sm leading-5 text-gray-900">OBSERVACION SMS</div>
                                 </td>
                                 <td class="py-2 px-3 whitespace-no-wrap border-b border-gray-200 text-center">
                                     <div class="text-sm leading-5 font-medium text-gray-900">{{ $lectura->notificacion->observacion_sms }}</div>
@@ -67,7 +67,7 @@
 
                             <tr>
                                 <td class="py-2 px-3 whitespace-no-wrap border-b border-gray-200 text-center">
-                                    <div class="text-sm leading-5 text-gray-900">NOTIFICACION WHATSAPP</div>
+                                    <div class="text-sm leading-5 text-gray-900">WHATSAPP</div>
                                 </td>
                                 <td class="py-2 px-3 whitespace-no-wrap border-b border-gray-200 text-center">
                                     @if ($lectura->notificacion->estado_whatsapp == 1)
@@ -83,7 +83,7 @@
                             @if($lectura->notificacion->estado_whatsapp == 2)
                             <tr>
                                 <td class="py-2 px-3 whitespace-no-wrap border-b border-gray-200 text-center">
-                                    <div class="text-sm leading-5 text-gray-900">FECHA ENVIO NOTIFICACION WHATSAPP</div>
+                                    <div class="text-sm leading-5 text-gray-900">ENVIO WHATSAPP</div>
                                 </td>
                                 <td class="py-2 px-3 whitespace-no-wrap border-b border-gray-200 text-center">
                                     <div class="text-sm leading-5 font-medium text-gray-900">{{ $lectura->notificacion->fecha_whatsapp }}</div>
@@ -94,7 +94,7 @@
                             @if($lectura->notificacion->estado_whatsapp == 3)
                             <tr>
                                 <td class="py-2 px-3 whitespace-no-wrap border-b border-gray-200 text-center">
-                                    <div class="text-sm leading-5 text-gray-900">OBSERVACION NOTIFICACION WHATSAPP</div>
+                                    <div class="text-sm leading-5 text-gray-900">OBSERVACION WHATSAPP</div>
                                 </td>
                                 <td class="py-2 px-3 whitespace-no-wrap border-b border-gray-200 text-center">
                                     <div class="text-sm leading-5 font-medium text-gray-900">{{ $lectura->notificacion->observacion_whatsapp }}</div>
